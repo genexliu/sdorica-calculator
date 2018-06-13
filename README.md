@@ -1,10 +1,6 @@
 # Sdorica Calculator
 
-## Prerequisite
-
-- go command
-
-## How to use
+## Usage
 
 ```
 # read usage
@@ -26,3 +22,7 @@ go run src/draw/main/main.go -init_prob 0.0075 -char_cnt 2 -prob_step 0.0015 -ma
 ```
 go test draw/main
 ```
+
+## Prerequisite
+
+- go command
