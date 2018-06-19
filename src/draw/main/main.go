@@ -12,20 +12,25 @@ const (
 )
 
 var (
-	initProb = flag.Float64("init_prob", 0, "initial probability")
-	probStep = flag.Float64("prob_step", 0, "the amount of probability increment per ${batch} draws")
-	batch    = flag.Uint("batch", defaultBatch, "the amount of draws for probability to increase")
-	charCnt  = flag.Uint("char_cnt", 1, "the amount of low probability characters in the pool")
-	maxDraw  = flag.Uint("max_draw", defaultMaxDraw, "the amount of draws that guarantees the player a low probability character")
+	initProb  = flag.Float64("init_prob", 0, "低機率角色初始機率")
+	probStep  = flag.Float64("prob_step", 0, "${batch}連抽不中機率加成")
+	batch     = flag.Uint("batch", defaultBatch, "連抽次數")
+	charCnt   = flag.Uint("char_cnt", 1, "低機率角色數量")
+	targetCnt = flag.Uint("target_cnt", 1, "低機率角色中想要的角色數量")
+	maxDraw   = flag.Uint("max_draw", defaultMaxDraw, "保底抽數")
 )
 
 func main() {
 	flag.Parse()
 
-	fmt.Printf("expected value: %v\n", calc(*initProb, *probStep, *batch, *charCnt, *charCnt, *maxDraw))
-	fmt.Printf("expected value for one: %v\n", calc(*initProb, *probStep, *batch, *charCnt, 1, *maxDraw))
+	fmt.Printf("抽出任一個想要角色的抽數期望值: %v\n", calc(*initProb, *probStep, *batch, *charCnt, *targetCnt, *maxDraw))
+	fmt.Printf("抽出特定角色的抽數期望值: %v\n", calc(*initProb, *probStep, *batch, *charCnt, 1, *maxDraw))
 
-	return
+	var total = 0.0
+	for t := *targetCnt; t >= 1; t-- {
+		total = total + calc(*initProb, *probStep, *batch, *charCnt, t, *maxDraw)
+	}
+	fmt.Printf("抽出所有想要角色的抽數期望值: %v\n", total)
 }
 
 // calc returns the expected value

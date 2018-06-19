@@ -43,6 +43,8 @@ func TestCalc(t *testing.T) {
 
 	// 1*0.4 + 2*(1-0.4)*0.4 + 3*[(1-0.4)*(1-0.4)]*0.4 + 4*[(1-0.4)*(1-0.4)*(1-0.4)]*0.6 + 5*[(1-0.4)*(1-0.4)*(1-0.4)*(1-0.6)]*1
 	assertAppoxEqual(2.2624, calc(0.2, 0.1, 3, 2, 2, 5), t)
+
+	// TODO: test targetCnt < charCnt
 }
 
 func assertAppoxEqual(a, b float64, t *testing.T) {
