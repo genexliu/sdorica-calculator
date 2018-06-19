@@ -22,36 +22,41 @@ var (
 func main() {
 	flag.Parse()
 
-	fmt.Printf("expected value: %v\n", calc(*initProb, *probStep, *batch, *charCnt, *maxDraw))
+	fmt.Printf("expected value: %v\n", calc(*initProb, *probStep, *batch, *charCnt, *charCnt, *maxDraw))
+	fmt.Printf("expected value for one: %v\n", calc(*initProb, *probStep, *batch, *charCnt, 1, *maxDraw))
 
 	return
 }
 
 // calc returns the expected value
 func calc(
-	initProb float64, probStep float64, batch uint, charCnt uint, maxDraw uint,
+	initProb float64, probStep float64, batch uint, charCnt uint, targetCnt uint, maxDraw uint,
 ) float64 {
 	var hit = initProb
 	var prevMiss = 1.0
-	var exp = 0.0
+	var expNum = 0.0   // numerator
+	var expDenom = 1.0 // denominator
 	var cnt = uint(1)
 
-	for ; cnt < maxDraw; cnt++ {
+	for {
 		var p = hit * float64(charCnt)
-		// the probability is so high that it is almost a guaranteed hit
 		if p > threshold {
 			break
 		}
+		if cnt%maxDraw == 0 {
+			p = 1.0
+			hit = p / float64(charCnt)
+		}
 
-		exp = exp + float64(cnt)*prevMiss*p
+		expNum = expNum + float64(cnt)*prevMiss*hit*float64(targetCnt) + float64(cnt)*prevMiss*(p-hit*float64(targetCnt))
+		expDenom = expDenom - prevMiss*(p-hit*float64(targetCnt))
 
 		// update for next loop
 		prevMiss = prevMiss * (1.0 - p)
-		//fmt.Printf("%v %v %v\n", cnt, p, exp)
 		if cnt%batch == 0 {
 			hit = hit + probStep
 		}
+		cnt++
 	}
-	// plus guaranteed hit
-	return exp + float64(cnt)*prevMiss*1.0
+	return expNum / expDenom
 }
