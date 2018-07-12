@@ -7,10 +7,11 @@
 go run src/draw/main/main.go -h
 
 # 午茶賦魂連續十抽, 抽數期望值分析
-$ go run src/draw/main/main.go -init_prob 0.01 -char_cnt 1 -target_cnt 1 -prob_step 0.002
-抽出任一個想要角色的抽數期望值: 56.96
-抽出特定角色的抽數期望值: 56.96
-抽出所有想要角色的抽數期望值: 56.96
+go run src/draw/main/main.go -init_prob 0.01 -char_cnt 1 -target_cnt 1 -prob_step 0.002 -max_draw 120
+# output:
+# 抽出任一個想要角色的抽數期望值: 54.89
+# 抽出特定角色的抽數期望值: 54.89
+# 抽出所有想要角色的抽數期望值: 54.89
 
 # 羈絆賦魂連續單抽, 抽數期望值分析
 go run src/draw/main/main.go -init_prob 0.0075 -char_cnt 2 -target_cnt 2
