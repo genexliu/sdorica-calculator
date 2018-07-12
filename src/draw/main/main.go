@@ -3,10 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"math"
 )
 
 const (
-	defaultBatch   uint    = 10
+	defaultBatch   uint    = 1
 	defaultMaxDraw uint    = 100000
 	threshold      float64 = 0.999
 )
@@ -53,8 +54,13 @@ func calc(
 			hit = p / float64(charCnt)
 		}
 
-		expNum = expNum + float64(cnt)*prevMiss*hit*float64(targetCnt) + float64(cnt)*prevMiss*(p-hit*float64(targetCnt))
-		expDenom = expDenom - prevMiss*(p-hit*float64(targetCnt))
+		drawCnt := math.Ceil(float64(cnt)/float64(batch)) * float64(batch)
+
+		expNum = expNum +
+			drawCnt*prevMiss*hit*float64(targetCnt) +
+			drawCnt*prevMiss*(p-hit*float64(targetCnt))
+		expDenom = expDenom -
+			prevMiss*(p-hit*float64(targetCnt))
 
 		// update for next loop
 		prevMiss = prevMiss * (1.0 - p)
