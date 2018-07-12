@@ -23,14 +23,14 @@ var (
 func main() {
 	flag.Parse()
 
-	fmt.Printf("抽出任一個想要角色的抽數期望值: %v\n", calc(*initProb, *probStep, *batch, *charCnt, *targetCnt, *maxDraw))
-	fmt.Printf("抽出特定角色的抽數期望值: %v\n", calc(*initProb, *probStep, *batch, *charCnt, 1, *maxDraw))
+	fmt.Printf("抽出任一個想要角色的抽數期望值: %.2f\n", calc(*initProb, *probStep, *batch, *charCnt, *targetCnt, *maxDraw))
+	fmt.Printf("抽出特定角色的抽數期望值: %.2f\n", calc(*initProb, *probStep, *batch, *charCnt, 1, *maxDraw))
 
 	var total = 0.0
 	for t := *targetCnt; t >= 1; t-- {
 		total = total + calc(*initProb, *probStep, *batch, *charCnt, t, *maxDraw)
 	}
-	fmt.Printf("抽出所有想要角色的抽數期望值: %v\n", total)
+	fmt.Printf("抽出所有想要角色的抽數期望值: %.2f\n", total)
 }
 
 // calc returns the expected value
